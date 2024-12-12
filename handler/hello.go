@@ -21,6 +21,7 @@ func (c *Hello) ServeHTTP(rw http.ResponseWriter, r *http.Request) {
 	fmt.Println("Request received")
 
 	d, err := io.ReadAll(r.Body)
+	fmt.Println("Hi", err)
 	if err != nil {
 		fmt.Println(err, "oops")
 		http.Error(rw, "oops", http.StatusBadGateway)
