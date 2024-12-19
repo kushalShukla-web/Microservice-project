@@ -13,19 +13,25 @@ import (
 )
 
 func main() {
+	// Here We are creating a logger object for structure logging in our Application.
+	// if you wanted to learn more about structure logging visit this site https://betterstack.com/community/guides/logging/logging-in-go/
 	logger := slog.New(slog.NewJSONHandler(os.Stdout, nil))
-	hello := handler.NewHello(logger)
+	// we are creating an object for diffrent parts of your application.
+	// example - for Purchasing coffee there gonna be a different handlers and for payment there gonna
+	// be a different handler.
 	product := handler.Newproduct(logger)
+	// Here creating a simple server with servermux.
 	sm := http.NewServeMux()
-	sm.Handle("/", hello)
-	sm.Handle("/product", product)
+	// routing to that request i.e get post put etc.
+	sm.Handle("/", product)
 	// creating a new customize server server
 	s := http.Server{
-		Addr:         ":9090",
-		Handler:      sm,
-		ReadTimeout:  5 * time.Second,
+		Addr:         ":9090",         // this server is using port 9090 for external communication
+		Handler:      sm,              // to use Default servermux or created by us.
+		ReadTimeout:  5 * time.Second, // maximum time to read request
 		WriteTimeout: 5 * time.Second,
 	}
+	// running in go routine
 	go func() {
 		err := s.ListenAndServe()
 		if err != nil {
@@ -43,5 +49,6 @@ func main() {
 
 	ctx, _ := context.WithTimeout(context.Background(), 30*time.Second)
 	s.Shutdown(ctx)
+	///////////
 
 }
